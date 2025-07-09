@@ -327,7 +327,7 @@ public: /* PlayerScript */
     void OnPlayerEmote(Player* player, uint32 emote);
     void OnPlayerTextEmote(Player* player, uint32 textEmote, uint32 emoteNum, ObjectGuid guid);
     void OnPlayerSpellCast(Player* player, Spell* spell, bool skipCheck);
-    void OnPlayerBeginCast(Player* player, Spell* spell, bool);
+    void OnPlayerBeginCast(Player* player, Spell* spell);
     void OnPlayerLogin(Player* player);
     void OnPlayerLoadFromDB(Player* player);
     void OnPlayerBeforeLogout(Player* player);

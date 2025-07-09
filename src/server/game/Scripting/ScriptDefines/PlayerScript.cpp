@@ -209,6 +209,11 @@ void ScriptMgr::OnPlayerSpellCast(Player* player, Spell* spell, bool skipCheck)
     CALL_ENABLED_HOOKS(PlayerScript, PLAYERHOOK_ON_SPELL_CAST, script->OnPlayerSpellCast(player, spell, skipCheck));
 }
 
+void ScriptMgr::OnPlayerBeginCast(Player* player, Spell* spell, bool skipCheck)
+{
+    CALL_ENABLED_HOOKS(PlayerScript, PLAYERHOOK_ON_BEGIN_CAST, script->OnPlayerBeginCast(player, spell));
+}
+
 void ScriptMgr::OnPlayerBeforeUpdate(Player* player, uint32 p_time)
 {
     CALL_ENABLED_HOOKS(PlayerScript, PLAYERHOOK_ON_BEFORE_UPDATE, script->OnPlayerBeforeUpdate(player, p_time));
