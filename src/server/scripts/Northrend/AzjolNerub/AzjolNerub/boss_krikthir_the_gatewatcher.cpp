@@ -133,6 +133,10 @@ public:
             BossAI::JustEngagedWith(who);
             Talk(SAY_AGGRO);
             events2.Reset();
+            //First time use spell timers
+            events.ScheduleEvent(EVENT_KRIK_SUMMON, randtime(10s, 13s));
+            events.ScheduleEvent(EVENT_KRIK_MIND_FLAY, randtime(8s, 14s));
+            events.ScheduleEvent(EVENT_KRIK_CURSE, 8s);
         }
 
         void JustDied(Unit* killer) override
@@ -193,9 +197,14 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_KRIK_HEALTH_CHECK:
-                    if (HealthBelowPct(10))
+                    if (HealthBelowPct(25))
                     {
                         me->CastSpell(me, SPELL_FRENZY, true);
+                        events.CancelEvent(EVENT_KRIK_MIND_FLAY);
+                        events.CancelEvent(EVENT_KRIK_SUMMON);
+                        // Speed up these events to reflect berserk status
+                        events.ScheduleEvent(EVENT_KRIK_MIND_FLAY, randtime(5s, 9s));
+                        events.ScheduleEvent(EVENT_KRIK_SUMMON, randtime(7s, 17s));
                         break;
                     }
                     events.ScheduleEvent(EVENT_KRIK_HEALTH_CHECK, 1s);
@@ -203,16 +212,16 @@ public:
                 case EVENT_KRIK_SUMMON:
                     Talk(SAY_SWARM);
                     me->CastSpell(me, SPELL_SWARM, false);
-                    events.ScheduleEvent(EVENT_KRIK_SUMMON, 20s);
+                    events.ScheduleEvent(EVENT_KRIK_SUMMON, randtime(26s, 30s));
                     break;
                 case EVENT_KRIK_MIND_FLAY:
                     me->CastSpell(me->GetVictim(), SPELL_MIND_FLAY, false);
-                    events.ScheduleEvent(EVENT_KRIK_MIND_FLAY, 15s);
+                    events.ScheduleEvent(EVENT_KRIK_MIND_FLAY, 14s);
                     break;
                 case EVENT_KRIK_CURSE:
                     if (Unit* target = SelectTarget(SelectTargetMethod::Random, 0, 100, true))
                         me->CastSpell(target, SPELL_CURSE_OF_FATIGUE, true);
-                    events.ScheduleEvent(EVENT_KRIK_CURSE, 10s);
+                    events.ScheduleEvent(EVENT_KRIK_CURSE, 30s);
                     break;
                 case EVENT_CALL_ADDS:
                     summons.DoZoneInCombat();
